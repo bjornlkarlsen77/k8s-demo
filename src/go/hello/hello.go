@@ -3,13 +3,19 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 )
 
 func main() {
-	http.HandleFunc("/", Handler)
-	http.HandleFunc("/slow", SlowHandler)
+	rootContext := os.Getenv("ROOT_CONTEXT")
+	if rootContext == "" {
+		rootContext = "/" // Default to "/" if the variable is not set
+	}
+	http.HandleFunc(rootContext, Handler)
+	http.HandleFunc(rootContext+"slow", SlowHandler)
 	http.HandleFunc("/healthz", Healthz)
 	http.HandleFunc("/ready", Ready)
+	fmt.Println("Server starting on :8080")
 	http.ListenAndServe(":8080", nil)
 }
 
