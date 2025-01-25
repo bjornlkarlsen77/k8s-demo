@@ -14,7 +14,7 @@ func main() {
 	}
 	http.HandleFunc(rootContext, Handler)
 	http.HandleFunc(rootContext+"slow", SlowHandler)
-	http.HandleFunc("/memory-leak", LeakMemoryHandler)
+	http.HandleFunc(rootContext+"memory-leak", LeakMemoryHandler)
 	http.HandleFunc("/healthz", Healthz)
 	http.HandleFunc("/ready", Ready)
 	fmt.Println("Server starting on :8080")
