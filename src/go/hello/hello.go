@@ -14,10 +14,12 @@ func main() {
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("api called")
 	fmt.Fprintf(w, "Hello, from GoLang!")
 }
 
 func SlowHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("slow api called")
 	for i := 1; i <= 1000; i++ {
 		fmt.Println(i)
 	}
