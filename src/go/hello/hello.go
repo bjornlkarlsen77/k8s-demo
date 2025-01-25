@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+var memoryLeak []string // A global variable to hold the memory
 func main() {
 	rootContext := os.Getenv("ROOT_CONTEXT")
 	if rootContext == "" {
@@ -13,10 +14,20 @@ func main() {
 	}
 	http.HandleFunc(rootContext, Handler)
 	http.HandleFunc(rootContext+"slow", SlowHandler)
+	http.HandleFunc("/memory-leak", LeakMemoryHandler)
 	http.HandleFunc("/healthz", Healthz)
 	http.HandleFunc("/ready", Ready)
 	fmt.Println("Server starting on :8080")
 	http.ListenAndServe(":8080", nil)
+}
+
+func LeakMemoryHandler(w http.ResponseWriter, r *http.Request) {
+	// Allocate more memory on each request (append to a global slice)
+	memoryLeak = append(memoryLeak, fmt.Sprintf("Request #%d", len(memoryLeak)+1))
+
+	// Simulate a growing memory leak
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(fmt.Sprintf("Memory leak in progress! Current memory usage: %d", len(memoryLeak))))
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +38,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 func SlowHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("slow api called")
 	for i := 1; i <= 1000; i++ {
-		fmt.Println(i)
 	}
 }
 
