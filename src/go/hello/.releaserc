@@ -1,0 +1,17 @@
+{
+  "branches": [
+    "main"
+  ],
+  "tagFormat": "go-hello-v${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "docker build -t ghcr.io/bjornlkarlsen77/k8s-demo/go-hello:${nextRelease.version} .",
+        "publishCmd": "docker push ghcr.io/bjornlkarlsen77/k8s-demo/go-hello:${nextRelease.version}"
+      }
+    ]
+  ]
+}
