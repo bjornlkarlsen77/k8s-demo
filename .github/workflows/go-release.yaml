@@ -1,0 +1,44 @@
+name: Go Release
+on:
+  workflow_dispatch:  # Allow manual runs
+  push:
+    branches:
+      - main
+    paths:
+      - src/go
+jobs:
+  release:
+    permissions:
+      contents: write
+      issues: write
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+
+      - name: Run tests
+        run: go test ./...
+        working-directory: src/go/hello
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Dry run to start with
+        run: npx semantic-release
+        working-directory: src/go/hello
+
+      - name: Debug
+        run: git status
