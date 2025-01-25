@@ -9,7 +9,7 @@ RUN go mod download
 
 # Copy the application source code and build the binary
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o hello
+RUN CGO_ENABLED=0 GOARCH=arm64 GOOS=linux go build -a -installsuffix cgo -o hello
 
 ### 
 ## Step 2: Runtime stage
