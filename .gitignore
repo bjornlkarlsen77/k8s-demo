@@ -2,3 +2,4 @@
 src/go/**/node_modules
 src/go/**/package.json
 src/go/**/package-lock.json
+**/ghcr-pull-secret.yml
