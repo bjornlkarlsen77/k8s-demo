@@ -5,7 +5,9 @@ on:
     branches:
       - main
     paths:
-      - 'src/go/**'
+      - 'src/go/**/*.go'
+      - 'src/go/**/Dockerfile'
+      - 'src/go/**/.releaserc'
 jobs:
   release:
     permissions:
